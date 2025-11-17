@@ -1,0 +1,30 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg
+*.egg-info/
+dist/
+build/
+*.so
+
+# Virtual Env
+venv/
+env/
+
+# Django
+*.log
+staticfiles/
+media/
+db.sqlite3
+
+# PyCharm
+.idea/
+
+# OS
+.DS_Store
+
+# Streamlit (later)
+.streamlit/
+
+# Cache
+.cache/
