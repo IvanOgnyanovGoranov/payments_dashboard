@@ -53,6 +53,7 @@ class Company(models.Model):
     address = models.TextField()
 
     class Meta:
+        verbose_name_plural = 'Companies'
         constraints = [
             models.UniqueConstraint(
                 fields=["customer", "name"],
