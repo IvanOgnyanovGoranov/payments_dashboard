@@ -11,6 +11,7 @@ class CustomerAdmin(admin.ModelAdmin):
         'created_at',
         'contact_email',
     )
+    search_fields = ('name', 'customer_code')
 
 @admin.register(Company)
 class CompanyAdmin(admin.ModelAdmin):
@@ -24,6 +25,7 @@ class CompanyAdmin(admin.ModelAdmin):
     list_filter = (
         'customer',
     )
+    search_fields = ('name', 'company_code')
 
 
 @admin.register(Account)
@@ -35,6 +37,7 @@ class AccountAdmin(admin.ModelAdmin):
         'currency',
         'is_active',
     )
+    search_fields = ('reference', 'beneficiary_name')
 
 @admin.register(Payment)
 class PaymentAdmin(admin.ModelAdmin):
@@ -46,3 +49,5 @@ class PaymentAdmin(admin.ModelAdmin):
         'beneficiary_name',
     )
     list_filter = ('account', 'payment_date')
+    search_fields = ('reference', 'beneficiary_name')
+    ordering = ('-payment_date',)
