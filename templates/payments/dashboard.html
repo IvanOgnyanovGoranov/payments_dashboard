@@ -1,0 +1,88 @@
+<!-- templates/payments/dashboard.html -->
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Payments Dashboard</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body { font-family: sans-serif; margin: 20px; }
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    table { border-collapse: collapse; width: 100%; }
+    th, td { padding: 6px 8px; border: 1px solid #ddd; text-align: left; }
+  </style>
+</head>
+<body>
+  <h1>Payments Dashboard</h1>
+
+  <div class="grid">
+    <div>
+      <h2>Monthly Volume</h2>
+      <canvas id="monthlyChart"></canvas>
+    </div>
+
+    <div>
+      <h2>Payment Status</h2>
+      <table>
+        <thead><tr><th>Status</th><th>Count</th></tr></thead>
+        <tbody>
+          {% for s in statuses %}
+          <tr><td>{{ s.status }}</td><td>{{ s.count }}</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      <h3>Top Beneficiaries</h3>
+      <table>
+        <thead><tr><th>Beneficiary</th><th>Total</th><th>Count</th></tr></thead>
+        <tbody>
+          {% for b in beneficiaries %}
+          <tr><td>{{ b.beneficiary_name }}</td><td>{{ b.total_amount }}</td><td>{{ b.count }}</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <div style="grid-column: 1 / -1;">
+      <h2>Top Accounts by Volume</h2>
+      <table>
+        <thead><tr><th>Account</th><th>Total Volume</th><th>Payments</th></tr></thead>
+        <tbody>
+          {% for a in account_volumes %}
+          <tr>
+            <td>{{ a.account__display_name }}</td>
+            <td>{{ a.total_volume }}</td>
+            <td>{{ a.payments_count }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script>
+    const months = {{ months|safe }};
+    const monthlyAmounts = {{ monthly_amounts|safe }};
+
+    const ctx = document.getElementById('monthlyChart').getContext('2d');
+    new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: months,
+        datasets: [{
+          label: 'Total amount by month',
+          data: monthlyAmounts,
+          fill: false,
+          borderColor: 'rgb(75, 192, 192)',
+          tension: 0.1
+        }]
+      },
+      options: {
+        responsive: true,
+        scales: {
+          y: { beginAtZero: true }
+        }
+      }
+    });
+  </script>
+</body>
+</html>
