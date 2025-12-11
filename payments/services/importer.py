@@ -1,8 +1,30 @@
 import csv
-from decimal import Decimal
+from decimal import Decimal, InvalidOperation
 from datetime import datetime
 
 from payments.models import Payment
+
+def validate_and_convert(payment):
+    """Validates and converts payment's amount, date and is_batch, and returns errors if there are any."""
+    errors = []
+
+    try:
+        payment['amount'] = Decimal(payment['amount'])
+    except (InvalidOperation, ValueError):
+        errors.append('Invalid amount')
+
+    try:
+        payment['payment_date'] = datetime.strptime(payment["payment_date"])
+    except (ValueError, TypeError):
+        errors.append("Invalid payment_date")
+
+        # is_batch
+    try:
+        payment["is_batch"] = str(payment["is_batch"]).lower() == "true"
+    except Exception:
+        errors.append("Invalid is_batch")
+
+    return payment, errors
 
 
 def load_payments_from_csv(filepath):
@@ -13,8 +35,6 @@ def load_payments_from_csv(filepath):
         reader = csv.reader(data_file)
 
         header = next(reader, None)
-
-
 
         for row in reader:
             if not row:
@@ -32,42 +52,6 @@ def load_payments_from_csv(filepath):
             payment["is_batch"] = payment["is_batch"].lower() == "true"
 
             payments.append(payment)
-
-            # reference = row[0]
-            # account_number = row[1]
-            # beneficiary_name = row[2]
-            # beneficiary_account_number = row[3]
-            # raw_amount = row[4]
-            # currency = row[5]
-            # raw_date = row[6]
-            # status = row[7]
-            # is_batch = row[8]
-            #
-            # try:
-            #     amount = Decimal(raw_amount)
-            # except:
-            #     print(f"[SKIPPING ROW] Invalid amount: {raw_amount}")
-            #     continue
-            #
-            # try:
-            #     payment_date = datetime.strptime(raw_date, '%Y-%m-%d')
-            # except:
-            #     print(f"[SKIPPING ROW] Invalid date: {raw_date}")
-            #     continue
-            #
-            # payment = {
-            #         "account_number": account_number,
-            #         "beneficiary_name": beneficiary_name,
-            #         "beneficiary_account_number": beneficiary_account_number,
-            #         "amount": raw_amount,
-            #         "currency": currency,
-            #         "payment_date": raw_date,
-            #         "status": status,
-            #         "is_batch": is_batch,
-            #         "reference": reference
-            # }
-            # payments.append(payment)
-    print(payments)
 
     return payments
 
