@@ -4,26 +4,26 @@ from datetime import datetime
 
 from payments.models import Payment
 
-def validate_and_convert(payment):
-    """Validates and converts payment's amount, date and is_batch, and returns errors if there are any."""
-    errors = []
 
+def validate_and_convert(payment):
+    """Validates and converts payment fields. Raises ValueError on any issue."""
+
+    # Validate and convert amount
     try:
         payment['amount'] = Decimal(payment['amount'])
     except (InvalidOperation, ValueError):
-        errors.append('Invalid amount')
+        raise ValueError(f"Invalid amount: {payment['amount']}")
 
+    # Validate and convert date
     try:
-        payment['payment_date'] = datetime.strptime(payment["payment_date"])
+        payment['payment_date'] = datetime.strptime(payment["payment_date"], "%Y-%m-%d")
     except (ValueError, TypeError):
-        errors.append("Invalid payment_date")
+        raise ValueError(f"Invalid payment_date: {payment['payment_date']}")
 
-    try:
-        payment["is_batch"] = str(payment["is_batch"]).lower() == "true"
-    except Exception:
-        errors.append("Invalid is_batch")
+    # Validate batch flag
+    payment["is_batch"] = str(payment["is_batch"]).lower() == "true"
 
-    return payment, errors
+    return payment
 
 
 def load_payments_from_csv(filepath):
@@ -32,7 +32,6 @@ def load_payments_from_csv(filepath):
 
     with open(filepath, newline="", encoding="utf-8") as data_file:
         reader = csv.reader(data_file)
-
         header = next(reader, None)
 
         for row in reader:
@@ -49,6 +48,7 @@ def load_payments_from_csv(filepath):
 
             payments.append(payment)
 
+    print(payments)
     return payments
 
 payments_list = load_payments_from_csv('payments/imports/payments_demo.csv')

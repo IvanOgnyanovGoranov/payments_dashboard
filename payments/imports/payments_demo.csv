@@ -1,5 +1,5 @@
 reference,account_number,beneficiary_name,beneficiary_account_number,amount,currency,payment_date,status,is_batch
-PMT-0001,ACC1001,John Doe,BEN100001,1024.55,EUR,2025-01-02,Processed,False
+PMT-0001,ACC1001,John Doe,BEN100001,222.00,EUR,2025-01-02,Processed,False
 PMT-0002,ACC2001,Acme Corp,BEN200002,8420.00,EUR,2025-01-03,In Progress,True
 PMT-0003,ACC3001,Maria Petrova,BEN300003,233.10,EUR,2025-01-04,Failed,False
 PMT-0004,ACC4001,TechStart Ltd,BEN400004,4500.75,EUR,2025-01-05,Processed,False
