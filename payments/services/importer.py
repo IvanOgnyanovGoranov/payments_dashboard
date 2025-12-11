@@ -18,7 +18,6 @@ def validate_and_convert(payment):
     except (ValueError, TypeError):
         errors.append("Invalid payment_date")
 
-        # is_batch
     try:
         payment["is_batch"] = str(payment["is_batch"]).lower() == "true"
     except Exception:
@@ -40,16 +39,13 @@ def load_payments_from_csv(filepath):
             if not row:
                 continue
 
-            payment = {}
+            payment = {header[i]: row[i] for i in range(len(row))}
 
-            for position in range(len(row)):
-                key = header[position]
-                value = row[position]
-                payment[key] = value
-
-            payment["amount"] = Decimal(payment["amount"])
-            payment["payment_date"] = datetime.strptime(payment["payment_date"], "%Y-%m-%d")
-            payment["is_batch"] = payment["is_batch"].lower() == "true"
+            try:
+                validate_and_convert(payment)
+            except ValueError as e:
+                print("[SKIPPING ROW]", e)
+                continue
 
             payments.append(payment)
 
