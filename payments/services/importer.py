@@ -47,7 +47,6 @@ def load_payments_from_csv(filepath):
     print(payments)
     return payments
 
-payments_list = load_payments_from_csv('payments/imports/payments_demo.csv')
 
 def save_payments_to_db(payments_list):
     payment_objects = []
@@ -61,5 +60,11 @@ def save_payments_to_db(payments_list):
             print(f"[SKIP] Invalid payment data: {e}")
             skipped += 1
 
-    print(f"Inserted: {len(payment_objects)}")
+    Payment.objects.bulk_create(payment_objects)
+
     print(f"Skipped: {skipped}")
+
+
+def import_payments(filepath):
+    payments = load_payments_from_csv(filepath)
+    save_payments_to_db(payments)

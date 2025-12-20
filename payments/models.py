@@ -139,6 +139,12 @@ class Payment(models.Model):
         blank=False,
     )
 
+    beneficiary_iban = models.CharField(
+        max_length=34,
+        null=True,
+        blank=True,
+    )
+
     amount = models.DecimalField(
         max_digits=12,
         decimal_places=2
@@ -174,6 +180,13 @@ class Payment(models.Model):
             models.Index(fields=['status']),
             models.Index(fields=['currency']),
             models.Index(fields=['account', 'payment_date']),
+        ]
+        constraints = [
+            CheckConstraint(
+                check=Q(beneficiary_iban__isnull=False, beneficiary_iban__gt='') |
+                      Q(beneficiary_account_number__isnull=False, beneficiary_account_number__gt=''),
+                name="beneficiary_iban_or_account_required"
+            )
         ]
 
     def __str__(self):
