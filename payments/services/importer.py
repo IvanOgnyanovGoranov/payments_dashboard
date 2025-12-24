@@ -1,7 +1,7 @@
 import csv
 from decimal import Decimal, InvalidOperation
 from datetime import datetime
-from payments.models import Payment
+from payments.models import Payment, Account
 
 
 def validate_and_convert(payment):
@@ -13,9 +13,14 @@ def validate_and_convert(payment):
         raise ValueError(f"Invalid amount: {payment['amount']}")
 
     try:
-        payment['payment_date'] = datetime.strptime(payment["payment_date"], "%Y-%m-%d")
+        payment['payment_date'] = datetime.strptime(payment["payment_date"], "%Y-%m-%d %H:%M:%S")
     except (ValueError, TypeError):
         raise ValueError(f"Invalid payment_date: {payment['payment_date']}")
+
+    try:
+        payment["account"] = Account.objects.get(display_name=payment["account"])
+    except Account.DoesNotExist:
+        raise ValueError(f"Unknown account: {payment['account']}")
 
     payment["is_batch"] = str(payment["is_batch"]).lower() == "true"
 

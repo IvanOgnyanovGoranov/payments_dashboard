@@ -1,6 +1,4 @@
-# payments/management/commands/seed_demo.py
 from django.core.management.base import BaseCommand
-from django.utils import timezone
 from decimal import Decimal
 import datetime
 
@@ -10,7 +8,6 @@ class Command(BaseCommand):
     help = "Seed demo data: 1 customer, 2 companies, 2 accounts, payments over 3 months."
 
     def handle(self, *args, **options):
-        # clear small set (optional)
         Payment.objects.all().delete()
         Account.objects.all().delete()
         Company.objects.all().delete()
@@ -23,7 +20,6 @@ class Command(BaseCommand):
         acc1 = Account.objects.create(company=comp_a, display_name="Main EUR", account_number="BE123", currency="EUR")
         acc2 = Account.objects.create(company=comp_b, display_name="Main USD", account_number="NL321", currency="USD")
 
-        # create payments spread across months
         base = datetime.datetime(2025, 1, 5, 12, 0, 0)
         payments = [
             (acc1, "Alice", "ALICEIBAN", Decimal("100.00"), base),

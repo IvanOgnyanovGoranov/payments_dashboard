@@ -6,5 +6,5 @@ class Command(BaseCommand):
     help = "Import payments from a CSV file"
 
     def handle(self, *args, **options):
-        import_payments("payments/imports/payments_demo.csv")
+        import_payments("payments/imports/payments_40.csv")
 
