@@ -66,3 +66,12 @@ What This Project Demonstrates
  - Backend-first, production-oriented Django design
 
  - Foundations relevant to data engineering and backend roles
+
+Status
+
+This project is intentionally backend-focused and not deployed.
+It serves as a learning and portfolio project to explore data pipelines, domain modeling, and system behavior under realistic constraints.
+
+Repository
+
+https://github.com/IvanOgnyanovGoranov/payments_dashboard
