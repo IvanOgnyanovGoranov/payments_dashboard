@@ -54,6 +54,7 @@ def load_payments_from_csv(filepath):
 
 
 def save_payments_to_db(payments_list):
+    """Validates payment objects and bulk saves in the database."""
     payment_objects = []
     skipped = 0
 
@@ -71,5 +72,6 @@ def save_payments_to_db(payments_list):
 
 
 def import_payments(filepath):
+    """Triggers load_payments_from_csv and save_payments_to_db."""
     payments = load_payments_from_csv(filepath)
     save_payments_to_db(payments)

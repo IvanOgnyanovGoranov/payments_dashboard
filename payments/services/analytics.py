@@ -50,4 +50,4 @@ def status_breakdown():
         .annotate(count=Count('id'))
         .order_by('-count')
     )
-    return list(qs)
+    return list(qs)                                                                                                                                                                                                                                                     
